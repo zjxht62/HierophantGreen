@@ -1,6 +1,7 @@
 import requests
 import jsonpath
 import re
+from commons.requests_util import RequestsUtil
 
 
 class TestApi:
@@ -16,17 +17,17 @@ class TestApi:
                  'appid': 'wx8a9de038e93f77ab',
                  'secret': '8326fc915928dee3165720c910effb86'}
         # res = requests.get(url=urls, params=datas)
-        res = TestApi.sess.request('get', url=urls, params=datas)
+        # res = TestApi.sess.request('get', url=urls, params=datas)
+        res = RequestsUtil().send_all_request(method='get', url=urls, params=datas)
         # lis = jsonpath.jsonpath(res.json(), '$.access_token')
         TestApi.access_token = res.json()['access_token']
-        print(TestApi.access_token)
 
     def test_select_flag(self):
         urls = 'https://api.weixin.qq.com/cgi-bin/tags/get'
         datas = {'access_token': TestApi.access_token}
         # res = requests.get(url=urls, params=datas)
-        res = TestApi.sess.request('get', url=urls, params=datas)
-        print(res.json())
+        # res = TestApi.sess.request('get', url=urls, params=datas)
+        res = RequestsUtil().send_all_request(method='get', url=urls, params=datas)
 
     # 编辑标签接口
     def test_edit_flag(self):
@@ -34,26 +35,26 @@ class TestApi:
         params = {'access_token': TestApi.access_token}
         datas = {"tag": {"id": 134, 'name': '广东人'}}
         # res = requests.post(url=urls, json=datas, params=params)
-        res = TestApi.sess.request('post', url=urls, json=datas, params=params)
+        # res = TestApi.sess.request('post', url=urls, json=datas, params=params)
+        res = RequestsUtil().send_all_request(method='post', url=urls, json=datas, params=params)
 
-        print(res.json())
 
     def test_file_upload(self):
         urls = 'https://api.weixin.qq.com/cgi-bin/media/uploadimg'
         params = {'access_token': TestApi.access_token}
         datas = {'media': open(r"D:\aaa.jpg", 'rb')}
         # res = requests.post(url=urls, files=datas, params=params)
-        res = TestApi.sess.request('post', url=urls, files=datas, params=params)
+        # res = TestApi.sess.request('post', url=urls, files=datas, params=params)
+        res = RequestsUtil().send_all_request(method='post', url=urls, files=datas, params=params)
 
-        print(res.json())
 
     def test_phpwind(self):
         urls = 'http://47.107.116.139/phpwind/'
         # res = requests.get(url=urls)
         res = TestApi.sess.request('get', url=urls)
+        res = RequestsUtil().send_all_request(method='get', url=urls)
         # print(res.text)
         TestApi.csrf_token = re.search('name="csrf_token" value="(.*?)"', res.text).group(1)
-        print(TestApi.csrf_token)
 
     def test_login(self):
         urls = 'http://47.107.116.139/phpwind/index.php?m=u&c=login&a=dorun'
@@ -69,8 +70,8 @@ class TestApi:
             'invite': ''
         }
         # res = requests.post(url=urls, data=datas, headers=headers)
-        res = TestApi.sess.request('post', url=urls, data= datas, headers=headers)
-        print(res.json())
+        # res = TestApi.sess.request('post', url=urls, data=datas, headers=headers)
+        res = RequestsUtil().send_all_request(method='post', url=urls, data=datas, headers=headers)
 
 
 if __name__ == '__main__':
